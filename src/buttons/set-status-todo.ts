@@ -1,6 +1,6 @@
 import { ActionRowBuilder, ButtonInteraction, Colors, EmbedBuilder, StringSelectMenuBuilder } from 'discord.js';
-import { AsyncDatabase } from 'src/sqlite';
-import { ToDo } from 'src/types';
+import { AsyncDatabase } from '../sqlite';
+import { ToDo } from '../types';
 
 export default {
     buttonId: /set-todo-status/,
