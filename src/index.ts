@@ -17,7 +17,15 @@ async function main(): Promise<void> {
     try {
         const db = await AsyncDatabase.open(dbFile);
 
-        await db.serializeAsync(async () => {});
+        await db.serializeAsync(async () => {
+            await db.runAsync(`CREATE TABLE IF NOT EXISTS todos (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE,
+                message_id TEXT NOT NULL UNIQUE,
+                todo TEXT NOT NULL UNIQUE,
+                status INTEGER NOT NULL DEFAULT 0,
+                assigned_to TEXT
+            )`);
+        });
 
         const client = new Client({
             intents: [IntentsBitField.Flags.Guilds],
