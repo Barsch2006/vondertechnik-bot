@@ -1,4 +1,4 @@
-import { CommandInteraction, SlashCommandBuilder, escapeMarkdown } from 'discord.js';
+import { Colors, CommandInteraction, EmbedBuilder, SlashCommandBuilder, escapeMarkdown } from 'discord.js';
 
 export default {
     data: new SlashCommandBuilder()
@@ -31,13 +31,22 @@ export default {
             return;
         }
 
-        const messageString = `<@${interaction.member?.user.id as string}> _fragt:_ ${question}
-
-${answers.map((value, index) => `${emojis[index]} ${value}`).join('\n')}
-`;
+        const embed = new EmbedBuilder().setAuthor({
+            name: interaction.user.tag,
+            iconURL: interaction.user.displayAvatarURL(),
+        })
+        .setColor(Colors.Blue)
+        .setTitle('Umfrage')
+        .setDescription(`<@${interaction.member?.user.id as string}> _fragt:_ ${question}`)
+        .setTimestamp()
+        .setFields(answers.map((value, index) => ({
+            name: `${emojis[index]} - ${value}`,
+            value: '\u200B',
+            inline: false,
+        })));
 
         const message = await interaction.reply({
-            content: messageString,
+            embeds: [embed],
             fetchReply: true,
         });
 
