@@ -35,7 +35,7 @@ export default {
             name: interaction.user.tag,
             iconURL: interaction.user.displayAvatarURL(),
         })
-        .setColor(Colors.Blue)
+        .setColor(Colors.White)
         .setTitle('Umfrage')
         .setDescription(`<@${interaction.member?.user.id as string}> _fragt:_ ${question}`)
         .setTimestamp()
