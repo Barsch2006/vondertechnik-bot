@@ -6,6 +6,7 @@ import discord, {
     Colors,
     ContextMenuCommandBuilder,
     EmbedBuilder,
+    TextChannel,
 } from 'discord.js';
 import { AsyncDatabase } from '../sqlite';
 
@@ -52,15 +53,31 @@ export default {
             return;
         }
 
-        const reply = await interaction.reply({
-            content: 'ToDo hinzugefügen..',
-            fetchReply: true,
+        const todoChannel = interaction.guild?.channels.cache.find(
+            (channel) => channel.name === 'todo-list' && channel.isTextBased(),
+        ) as TextChannel;
+
+        if (!todoChannel) {
+            await interaction.reply({
+                content: 'ToDo-Channel nicht gefunden.',
+                ephemeral: true,
+            });
+            return;
+        }
+
+        const msg = await todoChannel.send({
+            content: 'ToDo wird hinzugefügt..',
+        });
+
+        await interaction.reply({
+            content: 'Acknowledged',
+            ephemeral: true,
         });
 
         try {
-            await db.runAsync('INSERT INTO todos (message_id, todo) VALUES (?, ?)', [reply.id, todo]);
+            await db.runAsync('INSERT INTO todos (message_id, todo) VALUES (?, ?)', [msg.id, todo]);
 
-            await interaction.editReply({
+            await msg.edit({
                 content: undefined,
                 embeds: [
                     new EmbedBuilder()
