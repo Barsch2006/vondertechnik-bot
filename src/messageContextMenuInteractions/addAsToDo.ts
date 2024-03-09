@@ -1,4 +1,12 @@
-import discord, { ApplicationCommandType, Colors, ContextMenuCommandBuilder, EmbedBuilder } from 'discord.js';
+import discord, {
+    ActionRowBuilder,
+    ApplicationCommandType,
+    ButtonBuilder,
+    ButtonStyle,
+    Colors,
+    ContextMenuCommandBuilder,
+    EmbedBuilder,
+} from 'discord.js';
 import { AsyncDatabase } from '../sqlite';
 
 export default {
@@ -63,7 +71,33 @@ export default {
                         .setTitle('ToDo hinzugefügt')
                         .setDescription(todo)
                         .setTimestamp()
+                        .setFields([
+                            {
+                                name: 'Status',
+                                value: 'Open',
+                                inline: false,
+                            },
+                            {
+                                name: 'Assigned',
+                                value: 'None',
+                                inline: false,
+                            },
+                        ])
                         .setColor(Colors.White),
+                ],
+                components: [
+                    new ActionRowBuilder<ButtonBuilder>().addComponents(
+                        new ButtonBuilder()
+                            .setLabel('Assign to me')
+                            .setEmoji('🙋‍♂️')
+                            .setCustomId('self-assign-todo')
+                            .setStyle(ButtonStyle.Primary),
+                        new ButtonBuilder()
+                            .setLabel('Set Status')
+                            .setEmoji('⌛')
+                            .setCustomId('set-todo-status')
+                            .setStyle(ButtonStyle.Primary),
+                    ),
                 ],
             });
         } catch (error) {
