@@ -17,6 +17,8 @@ async function main(): Promise<void> {
     try {
         const db = await AsyncDatabase.open(dbFile);
 
+        await db.serializeAsync(async () => {});
+
         const client = new Client({
             intents: [IntentsBitField.Flags.Guilds],
         });
